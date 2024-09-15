@@ -30,8 +30,21 @@ public class MainMenu{
         RoomManagement rmMang= new RoomManagement();
 
         rmMang.addSingle(15000, "Wifi,AC");
+        rmMang.addSingle(20000, "Wifi,AC");
+        rmMang.addSingle(35000, "Wifi,AC");
         rmMang.addSingle(15000, "Wifi,AC");
-        rmMang.addSingle(15000, "Wifi,AC");
-        rmMang.addSingle(15000, "Wifi,AC");
+        rmMang.addDouble(60000,"Wifi,AC");
+        rmMang.addDouble(20000,"Wifi,AC");
+        rmMang.addDouble(25000,"Wifi,AC");
+        rmMang.addSuites(35000,"Wifi,AC");
+        rmMang.addSuites(20000,"Wifi,AC");
+        rmMang.addSuites(40000,"Wifi,AC");
+        rmMang.addSuites(30000,"Wifi,AC");
+
+        rmMang.setAvail_Status(103,false,"Maintenace");
+        //rmMang.Price_Range_Room(40000);
+
+        rmMang.SuiteAvial();
+
     }
 }

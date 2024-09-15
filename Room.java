@@ -24,7 +24,7 @@ abstract class Room {
     public boolean isAvailable(){
         return AvailabilityStatus;
     }
-    
+
     public void setAvailability(boolean AvailabilityStatus){
         this.AvailabilityStatus=AvailabilityStatus;
     }
@@ -33,7 +33,7 @@ abstract class Room {
 
     public void PrintInfo()
     {
-        System.out.println("Type: "+roomType+"\nRoom Number: "+roomNumber+"\nBasePrice: "+"\nAmenities: "+Amenities);
+        System.out.println("Type: "+roomType+"\nRoom Number: "+roomNumber+"\nBasePrice: "+basePrice+"\nAmenities: "+Amenities+"\n");
     }
 }
 

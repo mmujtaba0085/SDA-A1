@@ -30,4 +30,65 @@ public class RoomManagement {
         suites.add(temp);
         System.out.println("Suite Room Added, Room Number: "+temp.roomNumber);
     }
+    void Price_Range_Room(double max){
+        if(max<0){
+            System.out.println("Error (Value<0)");
+            return;
+        }
+
+        for (SingleRoom temp : singleRooms){
+            if(temp.basePrice<=max && temp.isAvailable())
+                temp.PrintInfo();
+        }
+        for(DoubleRoom temp : doubleRooms){
+            if(temp.basePrice<=max && temp.isAvailable())
+                temp.PrintInfo();
+        }
+        for(Suite temp : suites){
+            if(temp.basePrice<=max && temp.isAvailable())
+                temp.PrintInfo();
+        }
+    }
+
+    void SingleRoomAvail(){
+        for (SingleRoom temp : singleRooms){
+            if(temp.isAvailable())
+                temp.PrintInfo();
+        }
+    }
+
+    void DoubleRoomAvail(){
+        for(DoubleRoom temp : doubleRooms){
+            if(temp.isAvailable())
+                temp.PrintInfo();
+        }
+    }
+
+    void SuiteAvial(){
+        for(Suite temp : suites){
+            if(temp.isAvailable())
+                temp.PrintInfo();
+        }
+    }
+
+    void setAvail_Status(int roomNumber,boolean AvailabilityStatus,String UnAvail_Reason){
+        for (SingleRoom temp : singleRooms) {
+            if(temp.roomNumber==roomNumber){
+                temp.AvailabilityStatus=AvailabilityStatus;
+                temp.Unavailability_Reason=UnAvail_Reason;
+            }
+        }
+        for(DoubleRoom temp : doubleRooms){
+            if(temp.roomNumber==roomNumber){
+                temp.AvailabilityStatus=AvailabilityStatus;
+                temp.Unavailability_Reason=UnAvail_Reason;
+            }
+        }
+        for(Suite temp : suites){
+            if(temp.roomNumber==roomNumber){
+                temp.AvailabilityStatus=AvailabilityStatus;
+                temp.Unavailability_Reason=UnAvail_Reason;
+            }
+        }
+    }
 }
