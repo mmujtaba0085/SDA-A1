@@ -2,21 +2,29 @@ abstract class Room {
     protected int roomNumber;
     protected String roomType;
     protected boolean AvailabilityStatus;
+    protected String Unavailability_Reason;
     protected double basePrice;
     protected String Amenities;
+    private static int totalRooms=0;
 
-    Room(int roomNumber,String roomType,double basePrice,String Amenities){
-        this.roomNumber=roomNumber;
+    Room(String roomType,double basePrice,String Amenities){
+        this.roomNumber=++totalRooms;
         this.roomType=roomType;
         this.AvailabilityStatus=true;
         this.basePrice=basePrice;
         this.Amenities=Amenities;
+        if((totalRooms%100) % 7 == 0)
+        {
+
+            totalRooms-=7;
+            totalRooms+=100;
+        }
     }
 
     public boolean isAvailable(){
         return AvailabilityStatus;
     }
-
+    
     public void setAvailability(boolean AvailabilityStatus){
         this.AvailabilityStatus=AvailabilityStatus;
     }
@@ -30,8 +38,8 @@ abstract class Room {
 }
 
 class SingleRoom extends Room{
-    SingleRoom(int roomNumber,double basePrice,String Amenities){
-        super(roomNumber,"Single", basePrice, Amenities);
+    SingleRoom(double basePrice,String Amenities){
+        super("Single", basePrice, Amenities);
     }
 
     public double BookingCharges(int nights, double additionalCharges){
@@ -42,8 +50,8 @@ class SingleRoom extends Room{
 }
 
 class DoubleRoom extends Room{
-    DoubleRoom(int roomNumber,double basePrice,String Amenities){
-        super(roomNumber,"Double", basePrice, Amenities);
+    DoubleRoom(double basePrice,String Amenities){
+        super("Double", basePrice, Amenities);
     }
 
     public double BookingCharges(int nights, double additionalCharges){
@@ -54,8 +62,8 @@ class DoubleRoom extends Room{
 }
 
 class Suite extends Room{
-    Suite(int roomNumber,double basePrice,String Amenities){
-        super(roomNumber,"Suite", basePrice, Amenities);
+    Suite(double basePrice,String Amenities){
+        super("Suite", basePrice, Amenities);
     }
 
     public double BookingCharges(int nights, double additionalCharges){
