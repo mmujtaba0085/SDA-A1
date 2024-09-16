@@ -1,55 +1,190 @@
-public class MainMenu{
-    public static void main(String args[]){
-        // SingleRoom room1 = new SingleRoom( 15000, "Wifi,AC");
-        // SingleRoom room2 = new SingleRoom( 15000, "Wifi,AC");
-        // SingleRoom room3 = new SingleRoom( 15000, "Wifi,AC");
-        // SingleRoom room4 = new SingleRoom( 15000, "Wifi,AC");
-        // SingleRoom room5 = new SingleRoom( 15000, "Wifi,AC");
-        // SingleRoom room6 = new SingleRoom( 15000, "Wifi,AC");
-        // SingleRoom room7 = new SingleRoom( 15000, "Wifi,AC");
-        // SingleRoom room8 = new SingleRoom( 15000, "Wifi,AC");
-        // DoubleRoom room2 = new DoubleRoom(102,25000, "Wifi, AC");
-        // Suite room3 = new Suite(103,35000, "Wifi, AC");
+import java.util.Scanner;
 
-        //  room6.PrintInfo();
-        //  room7.PrintInfo();
-        //  room8.PrintInfo();
+public class MainMenu {
+    static RoomManagement roomManagement = new RoomManagement();
+    static GuestManagement guestManagement = new GuestManagement();
+    static Scanner scanner = new Scanner(System.in);
 
-        Regular guest1 = new Regular("Shawn Mend","blahblah123@gmail.com","03331306001","street3,Hyderabad");
-        // Frequent guest2 = new Frequent("Shawn eed","blahblah124@gmail.com","03331306002","street6,Hyderabad");
-        // Corporate guest3 = new Corporate("hawn eed","blahssblah124@gmail.com","03321306002","street8,Hyderabad");
-        
-        // guest1.PrintInfo();
-        // guest2.PrintInfo();
-        // guest3.PrintInfo();
+    public static void main(String[] args) {
+        boolean running = true;
 
-        // Frequent guestChange = new Frequent(guest1);
-        // guestChange.PrintInfo();
+        while (running) {
+            System.out.println("Hotel Management System");
+            System.out.println("1. Add Room");
+            System.out.println("2. Add Guest");
+            System.out.println("3. Book a Room");
+            System.out.println("4. Show Guests");
+            System.out.println("5. Show Available Rooms");
+            System.out.println("6. Exit");
+            System.out.print("Choose an option: ");
+            int option = scanner.nextInt();
+            scanner.nextLine(); // Consume newline
 
+            switch (option) {
+                case 1:
+                    addRoom();
+                    break;
+                case 2:
+                    addGuest();
+                    break;
+                case 3:
+                    bookRoom();
+                    break;
+                case 4:
+                    showGuests();
+                    break;
+                case 5:
+                    showAvailableRooms();
+                    break;
+                case 6:
+                    running = false;
+                    System.out.println("Exiting...");
+                    break;
+                default:
+                    System.out.println("Invalid option, try again.");
+            }
+        }
+    }
 
-        //RoomManagement rmMang= new RoomManagement();
+    private static void addRoom() {
+        System.out.print("Enter room type (Single/Double/Suite): ");
+        String roomType = scanner.nextLine();
+        System.out.print("Enter base price: ");
+        double price = scanner.nextDouble();
+        scanner.nextLine(); // Consume newline
+        System.out.print("Enter amenities (e.g., Wi-Fi, AC): ");
+        String amenities = scanner.nextLine();
 
-        // rmMang.addSingle(15000, "Wifi,AC");
-        // rmMang.addSingle(20000, "Wifi,AC");
-        // rmMang.addSingle(35000, "Wifi,AC");
-        // rmMang.addSingle(15000, "Wifi,AC");
-        // rmMang.addDouble(60000,"Wifi,AC");
-        // rmMang.addDouble(20000,"Wifi,AC");
-        // rmMang.addDouble(25000,"Wifi,AC");
-        // rmMang.addSuites(35000,"Wifi,AC");
-        // rmMang.addSuites(20000,"Wifi,AC");
-        // rmMang.addSuites(40000,"Wifi,AC");
-        // rmMang.addSuites(30000,"Wifi,AC");
+        switch (roomType.toLowerCase()) {
+            case "single":
+                roomManagement.addSingle(price, amenities);
+                break;
+            case "double":
+                roomManagement.addDouble(price, amenities);
+                break;
+            case "suite":
+                roomManagement.addSuites(price, amenities);
+                break;
+            default:
+                System.out.println("Invalid room type.");
+        }
+    }
 
-        //rmMang.setAvail_Status(103,false,"Maintenace");
-        //rmMang.Price_Range_Room(40000);
+    private static void addGuest() {
+        System.out.print("Enter guest type (Regular/Frequent/Corporate): ");
+        String guestType = scanner.nextLine();
+        System.out.print("Enter name: ");
+        String name = scanner.nextLine();
+        System.out.print("Enter email: ");
+        String email = scanner.nextLine();
+        System.out.print("Enter phone number: ");
+        String phone = scanner.nextLine();
+        System.out.print("Enter address: ");
+        String address = scanner.nextLine();
 
-        //rmMang.SuiteAvial();
+        switch (guestType.toLowerCase()) {
+            case "regular":
+                guestManagement.addRegular(name, email, phone, address);
+                break;
+            case "frequent":
+                guestManagement.addFrequent(name, email, phone, address);
+                break;
+            case "corporate":
+                guestManagement.addCorporate(name, email, phone, address);
+                break;
+            default:
+                System.out.println("Invalid guest type.");
+        }
+    }
 
-        GuestManagement gmMang=new GuestManagement();
+    private static void bookRoom() {
+        System.out.print("Enter guest ID: ");
+        int guestID = scanner.nextInt();
+        scanner.nextLine(); // Consume newline
 
-        gmMang.AddinHotelGuest(guest1);
-        gmMang.ShowinHotelGuest();
+        Guest guest = findGuestByID(guestID);
+        if (guest == null) {
+            System.out.println("Guest not found.");
+            return;
+        }
 
+        System.out.print("Enter room type to book (Single/Double/Suite): ");
+        String roomType = scanner.nextLine();
+        System.out.print("Enter number of nights: ");
+        int nights = scanner.nextInt();
+        System.out.print("Enter additional charges (if any): ");
+        double additionalCharges = scanner.nextDouble();
+        scanner.nextLine(); // Consume newline
+
+        Room room = findAvailableRoom(roomType);
+        if (room == null) {
+            System.out.println("No available rooms of this type.");
+            return;
+        }
+
+        double totalCost = room.BookingCharges(nights, additionalCharges);
+        guest.TotalFee += totalCost;
+        guest.BookingHistory.add("Room " + room.roomNumber + " (" + roomType + "), " + nights + " nights");
+
+        room.setAvailability(false); // Mark room as unavailable
+        guestManagement.AddinHotelGuest(guest);
+
+        System.out.println("Room booked successfully. Total cost: " + totalCost);
+    }
+
+    private static Guest findGuestByID(int guestID) {
+        for (Regular guest : guestManagement.regularGuest) {
+            if (guest.guestID == guestID) {
+                return guest;
+            }
+        }
+        for (Frequent guest : guestManagement.frequentGuest) {
+            if (guest.guestID == guestID) {
+                return guest;
+            }
+        }
+        for (Corporate guest : guestManagement.corporateGuest) {
+            if (guest.guestID == guestID) {
+                return guest;
+            }
+        }
+        return null;
+    }
+
+    private static Room findAvailableRoom(String roomType) {
+        switch (roomType.toLowerCase()) {
+            case "single":
+                for (SingleRoom room : roomManagement.singleRooms) {
+                    if (room.isAvailable()) {
+                        return room;
+                    }
+                }
+                break;
+            case "double":
+                for (DoubleRoom room : roomManagement.doubleRooms) {
+                    if (room.isAvailable()) {
+                        return room;
+                    }
+                }
+                break;
+            case "suite":
+                for (Suite room : roomManagement.suites) {
+                    if (room.isAvailable()) {
+                        return room;
+                    }
+                }
+                break;
+        }
+        return null;
+    }
+
+    private static void showGuests() {
+        guestManagement.ShowinHotelGuest();
+    }
+
+    private static void showAvailableRooms() {
+        roomManagement.SingleRoomAvail();
+        roomManagement.DoubleRoomAvail();
+        roomManagement.SuiteAvial();
     }
 }
