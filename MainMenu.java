@@ -15,7 +15,7 @@ public class MainMenu{
         //  room7.PrintInfo();
         //  room8.PrintInfo();
 
-        // Regular guest1 = new Regular("Shawn Mend","blahblah123@gmail.com","03331306001","street3,Hyderabad");
+        Regular guest1 = new Regular("Shawn Mend","blahblah123@gmail.com","03331306001","street3,Hyderabad");
         // Frequent guest2 = new Frequent("Shawn eed","blahblah124@gmail.com","03331306002","street6,Hyderabad");
         // Corporate guest3 = new Corporate("hawn eed","blahssblah124@gmail.com","03321306002","street8,Hyderabad");
         
@@ -27,24 +27,29 @@ public class MainMenu{
         // guestChange.PrintInfo();
 
 
-        RoomManagement rmMang= new RoomManagement();
+        //RoomManagement rmMang= new RoomManagement();
 
-        rmMang.addSingle(15000, "Wifi,AC");
-        rmMang.addSingle(20000, "Wifi,AC");
-        rmMang.addSingle(35000, "Wifi,AC");
-        rmMang.addSingle(15000, "Wifi,AC");
-        rmMang.addDouble(60000,"Wifi,AC");
-        rmMang.addDouble(20000,"Wifi,AC");
-        rmMang.addDouble(25000,"Wifi,AC");
-        rmMang.addSuites(35000,"Wifi,AC");
-        rmMang.addSuites(20000,"Wifi,AC");
-        rmMang.addSuites(40000,"Wifi,AC");
-        rmMang.addSuites(30000,"Wifi,AC");
+        // rmMang.addSingle(15000, "Wifi,AC");
+        // rmMang.addSingle(20000, "Wifi,AC");
+        // rmMang.addSingle(35000, "Wifi,AC");
+        // rmMang.addSingle(15000, "Wifi,AC");
+        // rmMang.addDouble(60000,"Wifi,AC");
+        // rmMang.addDouble(20000,"Wifi,AC");
+        // rmMang.addDouble(25000,"Wifi,AC");
+        // rmMang.addSuites(35000,"Wifi,AC");
+        // rmMang.addSuites(20000,"Wifi,AC");
+        // rmMang.addSuites(40000,"Wifi,AC");
+        // rmMang.addSuites(30000,"Wifi,AC");
 
-        rmMang.setAvail_Status(103,false,"Maintenace");
+        //rmMang.setAvail_Status(103,false,"Maintenace");
         //rmMang.Price_Range_Room(40000);
 
-        rmMang.SuiteAvial();
+        //rmMang.SuiteAvial();
+
+        GuestManagement gmMang=new GuestManagement();
+
+        gmMang.AddinHotelGuest(guest1);
+        gmMang.ShowinHotelGuest();
 
     }
 }

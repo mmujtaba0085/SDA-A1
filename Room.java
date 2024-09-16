@@ -33,7 +33,9 @@ abstract class Room {
 
     public void PrintInfo()
     {
+        System.out.println("------------------------------------------------------------------");
         System.out.println("Type: "+roomType+"\nRoom Number: "+roomNumber+"\nBasePrice: "+basePrice+"\nAmenities: "+Amenities+"\n");
+        System.out.println("------------------------------------------------------------------");
     }
 }
 

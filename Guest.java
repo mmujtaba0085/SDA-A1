@@ -35,6 +35,7 @@ abstract class Guest {
         this.GuestType=GuestType;
     }
     public void PrintInfo(){
+        System.out.println("------------------------------------------------------------------");
         System.out.println("Guest ID: " + guestID);
         System.out.println("Name: " + Name);
         System.out.println("Email: " + Email);
@@ -44,6 +45,7 @@ abstract class Guest {
         System.out.println("Total Fee: " + TotalFee);
         System.out.println("Total Entries: " + TotalEntries);
         System.out.println("Booking History: " + BookingHistory);
+        System.out.println("------------------------------------------------------------------");
     }
 }
 
