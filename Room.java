@@ -45,7 +45,7 @@ class SingleRoom extends Room{
     }
 
     public double BookingCharges(int nights, double additionalCharges){
-        double serviceCharges=basePrice + 0.5; //service Charges -> 5% of basePrice
+        double serviceCharges=basePrice * 0.05; //service Charges -> 5% of basePrice
         return (basePrice + serviceCharges) * nights ;   
     }
     
@@ -57,7 +57,7 @@ class DoubleRoom extends Room{
     }
 
     public double BookingCharges(int nights, double additionalCharges){
-        double serviceCharges=basePrice + 0.5; //service Charges -> 5% of basePrice
+        double serviceCharges=basePrice * 0.05; //service Charges -> 5% of basePrice
         return (basePrice + serviceCharges + additionalCharges) * nights  ;
     }
     

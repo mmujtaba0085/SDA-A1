@@ -13,9 +13,10 @@ public class MainMenu {
             System.out.println("1. Add Room");
             System.out.println("2. Add Guest");
             System.out.println("3. Book a Room");
-            System.out.println("4. Show Guests");
-            System.out.println("5. Show Available Rooms");
-            System.out.println("6. Exit");
+            System.out.println("4. Show Guests Staying");
+            System.out.println("5. Show All Guest");
+            System.out.println("6. Show Available Rooms");
+            System.out.println("7. Exit");
             System.out.print("Choose an option: ");
             int option = scanner.nextInt();
             scanner.nextLine(); // Consume newline
@@ -31,12 +32,14 @@ public class MainMenu {
                     bookRoom();
                     break;
                 case 4:
-                    showGuests();
+                    guestManagement.ShowinHotelGuest();
                     break;
                 case 5:
+                    guestManagement.GuestIdName();
+                case 6:
                     showAvailableRooms();
                     break;
-                case 6:
+                case 7:
                     running = false;
                     System.out.println("Exiting...");
                     break;
@@ -102,7 +105,7 @@ public class MainMenu {
         int guestID = scanner.nextInt();
         scanner.nextLine(); // Consume newline
 
-        Guest guest = findGuestByID(guestID);
+        Guest guest = guestManagement.findGuestByID(guestID);
         if (guest == null) {
             System.out.println("Guest not found.");
             return;
@@ -132,24 +135,7 @@ public class MainMenu {
         System.out.println("Room booked successfully. Total cost: " + totalCost);
     }
 
-    private static Guest findGuestByID(int guestID) {
-        for (Regular guest : guestManagement.regularGuest) {
-            if (guest.guestID == guestID) {
-                return guest;
-            }
-        }
-        for (Frequent guest : guestManagement.frequentGuest) {
-            if (guest.guestID == guestID) {
-                return guest;
-            }
-        }
-        for (Corporate guest : guestManagement.corporateGuest) {
-            if (guest.guestID == guestID) {
-                return guest;
-            }
-        }
-        return null;
-    }
+
 
     private static Room findAvailableRoom(String roomType) {
         switch (roomType.toLowerCase()) {
@@ -178,10 +164,7 @@ public class MainMenu {
         return null;
     }
 
-    private static void showGuests() {
-        guestManagement.ShowinHotelGuest();
-    }
-
+  
     private static void showAvailableRooms() {
         roomManagement.SingleRoomAvail();
         roomManagement.DoubleRoomAvail();

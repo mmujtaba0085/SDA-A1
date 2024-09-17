@@ -22,6 +22,7 @@ abstract class Guest {
         this.phoneNumber=phoneNumber;
         this.Address=Address;
         this.GuestType=GuestType;
+        System.out.println("Guest Id: " + this.guestID + " Guest Name: " + this.Name);
     }
 
     Guest(String Name,String Email,String phoneNumber,String Address,String GuestType,int GuestID){  //For Transfering Customer from 
