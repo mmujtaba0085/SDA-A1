@@ -9,6 +9,7 @@ public class MainMenu {
         boolean running = true;
 
         while (running) {
+            System.out.println("------------------------------------------------------------------");
             System.out.println("Hotel Management System");
             System.out.println("1. Add Room");
             System.out.println("2. Add Guest");
@@ -16,7 +17,11 @@ public class MainMenu {
             System.out.println("4. Show Guests Staying");
             System.out.println("5. Show All Guest");
             System.out.println("6. Show Available Rooms");
-            System.out.println("7. Exit");
+            System.out.println("7. Show Available Rooms By Price");
+            System.out.println("8. Remove Guest");
+            System.out.println("9. Show Guest History");
+            System.out.println("10. Exit");
+            System.out.println("------------------------------------------------------------------");
             System.out.print("Choose an option: ");
             int option = scanner.nextInt();
             scanner.nextLine(); // Consume newline
@@ -40,12 +45,31 @@ public class MainMenu {
                     showAvailableRooms();
                     break;
                 case 7:
+                    System.out.println("Enter Max Price Range: ");
+                    double price = scanner.nextDouble();
+                    if(price<0){
+                        break;
+                    }
+                    roomManagement.Price_Range_Room(price);
+                    break;
+                case 8:
+                    System.out.println("Provide Guest ID: ");
+                    int id=scanner.nextInt();
+                    guestManagement.RemoveinHotelGuest(guestManagement.findGuestByID(id));
+                    break;
+                case 9:
+                    System.out.println("Provide Guest ID:");
+                    int iD=scanner.nextInt();
+                    guestManagement.findGuestByID(iD).PrintInfo();
+                    break;
+                case 10:
                     running = false;
                     System.out.println("Exiting...");
                     break;
                 default:
                     System.out.println("Invalid option, try again.");
             }
+            System.out.println("------------------------------------------------------------------");
         }
     }
 

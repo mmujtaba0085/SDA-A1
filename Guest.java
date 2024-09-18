@@ -44,7 +44,6 @@ abstract class Guest {
         System.out.println("Address: " + Address);
         System.out.println("Guest Type: " + GuestType);
         System.out.println("Total Fee: " + TotalFee);
-        System.out.println("Total Entries: " + TotalEntries);
         System.out.println("Booking History: " + BookingHistory);
         System.out.println("------------------------------------------------------------------");
     }
