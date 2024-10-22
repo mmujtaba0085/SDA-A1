@@ -8,6 +8,11 @@ public class MainMenu {
     public static void main(String[] args) {
         boolean running = true;
 
+        // Load rooms from file on program start
+        RoomDataAccess.loadRooms(roomManagement);
+        // Load guests from file on program start
+        GuestDataAccess.loadGuests(guestManagement);
+
         while (running) {
             System.out.println("------------------------------------------------------------------");
             System.out.println("Hotel Management System");
@@ -41,6 +46,7 @@ public class MainMenu {
                     break;
                 case 5:
                     guestManagement.GuestIdName();
+                    break;
                 case 6:
                     showAvailableRooms();
                     break;
@@ -64,7 +70,11 @@ public class MainMenu {
                     break;
                 case 10:
                     running = false;
-                    System.out.println("Exiting...");
+                    // Save rooms to file before exit
+                    RoomDataAccess.saveRooms(roomManagement.singleRooms, roomManagement.doubleRooms, roomManagement.suites);
+                    // Save guests to file before exit
+                    GuestDataAccess.saveGuests(guestManagement.TotalGuest);
+                    System.out.println("Data saved. Exiting...");
                     break;
                 default:
                     System.out.println("Invalid option, try again.");
