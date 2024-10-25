@@ -4,14 +4,28 @@ public class MainMenu {
     static RoomManagement roomManagement = new RoomManagement();
     static GuestManagement guestManagement = new GuestManagement();
     static Scanner scanner = new Scanner(System.in);
-
+    static boolean useDatabase = false;  // Set this based on user input at the start
     public static void main(String[] args) {
         boolean running = true;
+        
+        // Ask the user to choose between file or database storage at the start
+        System.out.println("Choose data storage option (1: File, 2: Database): ");
+        int storageOption = scanner.nextInt();
+        scanner.nextLine();  // Consume newline
 
-        // Load rooms from file on program start
-        RoomDataAccess.loadRooms(roomManagement);
-        // Load guests from file on program start
-        GuestDataAccess.loadGuests(guestManagement);
+        if (storageOption == 2) {
+            useDatabase = true;
+            System.out.println("Database storage selected.");
+        } else {
+            System.out.println("File storage selected.");
+            // Load rooms from file on program start
+            RoomDataAccess.loadRooms(roomManagement);
+            // Load guests from file on program start
+            GuestDataAccess.loadGuests(guestManagement);
+        }
+
+
+        
 
         while (running) {
             System.out.println("------------------------------------------------------------------");
@@ -92,19 +106,29 @@ public class MainMenu {
         System.out.print("Enter amenities (e.g., Wi-Fi, AC): ");
         String amenities = scanner.nextLine();
 
+        Room room;
         switch (roomType.toLowerCase()) {
             case "single":
-                roomManagement.addSingle(price, amenities);
+                room = new SingleRoom(price, amenities);
+                roomManagement.singleRooms.add((SingleRoom) room);
                 break;
             case "double":
-                roomManagement.addDouble(price, amenities);
+                room = new DoubleRoom(price, amenities);
+                roomManagement.doubleRooms.add((DoubleRoom) room);
                 break;
             case "suite":
-                roomManagement.addSuites(price, amenities);
+                room = new Suite(price, amenities);
+                roomManagement.suites.add((Suite) room);
                 break;
             default:
                 System.out.println("Invalid room type.");
+                return;
         }
+
+        if (useDatabase) {
+            DatabaseConnection.addRoom(room);  // Save to database
+        }
+        System.out.println("Room added successfully.");
     }
 
     private static void addGuest() {
@@ -200,8 +224,12 @@ public class MainMenu {
 
   
     private static void showAvailableRooms() {
-        roomManagement.SingleRoomAvail();
-        roomManagement.DoubleRoomAvail();
-        roomManagement.SuiteAvial();
+        if (useDatabase) {
+            DatabaseConnection.getAvailableRooms().forEach(Room::PrintInfo); // Retrieve from database
+        } else {
+            roomManagement.SingleRoomAvail();
+            roomManagement.DoubleRoomAvail();
+            roomManagement.SuiteAvial();
+        }
     }
 }

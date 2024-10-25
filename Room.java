@@ -20,6 +20,15 @@ abstract class Room {
             totalRooms+=100;
         }
     }
+    Room(String roomType,double basePrice,String Amenities,int roomNumber){
+        this.roomNumber=roomNumber;
+        this.roomType=roomType;
+        this.AvailabilityStatus=true;
+        this.basePrice=basePrice;
+        this.Amenities=Amenities;
+        totalRooms=++roomNumber;
+        
+    }
 
     public boolean isAvailable(){
         return AvailabilityStatus;

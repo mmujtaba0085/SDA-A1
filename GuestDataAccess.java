@@ -25,7 +25,6 @@ public class GuestDataAccess {
             String line;
             while ((line = reader.readLine()) != null) {
                 String[] details = line.split(",");
-                int guestID = Integer.parseInt(details[0]);
                 String name = details[1];
                 String email = details[2];
                 String phone = details[3];

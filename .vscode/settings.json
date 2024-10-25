@@ -1,0 +1,8 @@
+{
+    "java.project.referencedLibraries": [
+        "lib/**/*.jar",
+        "c:\\Users\\moham\\Downloads\\sqljdbc_12.8.1.0_enu\\sqljdbc_12.8\\enu\\jars\\mssql-jdbc-12.8.1.jre8-sources.jar",
+        "c:\\Users\\moham\\Downloads\\sqljdbc_12.8.1.0_enu\\sqljdbc_12.8\\enu\\jars\\mssql-jdbc-12.8.1.jre11-sources.jar",
+        "c:\\Users\\moham\\Downloads\\mysql-connector-j-9.1.0\\mysql-connector-j-9.1.0\\mysql-connector-j-9.1.0.jar"
+    ]
+}
