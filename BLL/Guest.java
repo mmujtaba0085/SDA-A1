@@ -1,7 +1,8 @@
+package BLL;
 import java.util.ArrayList;
 import java.util.List;
 
-abstract class Guest {
+public abstract class Guest {
     protected int guestID;
     protected String Name;
     protected String Email;
@@ -50,7 +51,33 @@ abstract class Guest {
     public static int getTotalGuest() {
         return totalGuest; // No need to use a temporary variable
     }
-
+    public int getID(){
+        return guestID;
+    }
+    public String getName(){
+        return Name;
+    }
+    public String getEmail(){
+        return Email;
+    }
+    public String getPhNumber(){
+        return phoneNumber;
+    }
+    public String getAddress(){
+        return Address;
+    }
+    public String getGType(){
+        return GuestType;
+    }
+    public Double getTotalFee(){
+        return TotalFee;
+    }
+    public void setTotalFee(Double val){
+        TotalFee=val;
+    }
+    public void addBookingHistory(String val){
+        BookingHistory.add(val);
+    }
 }
 
 

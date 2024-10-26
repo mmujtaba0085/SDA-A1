@@ -1,4 +1,5 @@
-abstract class Room {
+package BLL;
+public abstract class Room {
     protected int roomNumber;
     protected String roomType;
     protected boolean AvailabilityStatus;
@@ -46,8 +47,9 @@ abstract class Room {
         System.out.println("Type: "+roomType+"\nRoom Number: "+roomNumber+"\nBasePrice: "+basePrice+"\nAmenities: "+Amenities+"\n");
         System.out.println("------------------------------------------------------------------");
     }
-    void TotalRoomInSystem(int val){
+    public int TotalRoomInSystem(int val){
         totalRooms=val%7 + (val/7)*100;
+        return totalRooms;
     }
     public int UpdateRoomCount(){
         int temp=++totalRooms;
@@ -59,41 +61,19 @@ abstract class Room {
         }
         return temp;
     }
+
+    public int getRoomNum(){
+        return roomNumber;
+    }
+    public String getRType(){
+        return roomType;
+    }
+    public double getBasePrice(){
+        return basePrice;
+    }
+    public String getAmenities(){
+        return Amenities;
+    }
 }
 
-class SingleRoom extends Room{
-    SingleRoom(double basePrice,String Amenities){
-        super("Single", basePrice, Amenities);
-    }
 
-    public double BookingCharges(int nights, double additionalCharges){
-        double serviceCharges=basePrice * 0.05; //service Charges -> 5% of basePrice
-        return (basePrice + serviceCharges) * nights ;   
-    }
-    
-}
-
-class DoubleRoom extends Room{
-    DoubleRoom(double basePrice,String Amenities){
-        super("Double", basePrice, Amenities);
-    }
-
-    public double BookingCharges(int nights, double additionalCharges){
-        double serviceCharges=basePrice * 0.05; //service Charges -> 5% of basePrice
-        return (basePrice + serviceCharges + additionalCharges) * nights  ;
-    }
-    
-}
-
-class Suite extends Room{
-    Suite(double basePrice,String Amenities){
-        super("Suite", basePrice, Amenities);
-    }
-
-    public double BookingCharges(int nights, double additionalCharges){
-        double serviceCharges=basePrice * 0.05; //service Charges -> 5% of basePrice
-        double luxuryTax=basePrice * 0.15; //luxury Tax -> 15% of basePrice
-        return (basePrice + serviceCharges + luxuryTax+ additionalCharges) * nights  ;
-    }
-    
-}

@@ -1,3 +1,6 @@
+import BLL.*;
+import DAL.*;
+import Connection.DatabaseConnection;
 import java.util.Scanner;
 
 public class MainMenu {
@@ -61,7 +64,7 @@ public class MainMenu {
                 case 5:
                     if(useDatabase)
                     {
-                        DatabaseConnection.showAllGuests();
+                        GuestDataAccess.showAllGuests();
                         break;
                     }
                     guestManagement.GuestIdName();
@@ -131,7 +134,7 @@ public class MainMenu {
         }
 
         if (useDatabase) {
-            DatabaseConnection.addRoom(room);  // Save to database
+            RoomDataAccess.addRoom(room);  // Save to database
         }
         System.out.println("Room added successfully.");
     }
@@ -163,7 +166,7 @@ public class MainMenu {
         }
 
         if(useDatabase){
-            DatabaseConnection.addGuest(name, email, phone, address, guestType);
+            GuestDataAccess.addGuest(name, email, phone, address, guestType);
         }
     }
 
@@ -193,8 +196,8 @@ public class MainMenu {
         }
 
         double totalCost = room.BookingCharges(nights, additionalCharges);
-        guest.TotalFee += totalCost;
-        guest.BookingHistory.add("Room " + room.roomNumber + " (" + roomType + "), " + nights + " nights");
+        guest.setTotalFee(guest.getTotalFee()+totalCost);
+        guest.addBookingHistory("Room " + room.getRoomNum() + " (" + roomType + "), " + nights + " nights");
 
         room.setAvailability(false); // Mark room as unavailable
         guestManagement.AddinHotelGuest(guest);
@@ -234,7 +237,7 @@ public class MainMenu {
   
     private static void showAvailableRooms() {
         if (useDatabase) {
-            DatabaseConnection.showAvailableRooms();
+            RoomDataAccess.showAvailableRooms();
         } else {
             roomManagement.SingleRoomAvail();
             roomManagement.DoubleRoomAvail();

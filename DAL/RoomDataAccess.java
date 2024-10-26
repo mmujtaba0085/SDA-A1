@@ -1,33 +1,76 @@
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement; 
-import java.sql.SQLException;
-import java.sql.ResultSet;
-import java.sql.Statement;
-import java.util.ArrayList;
+package DAL;
+
+import java.io.*;
 import java.util.List;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import BLL.*;
+import Connection.DatabaseConnection;
+public class RoomDataAccess {
+    
+    private static final String ROOMS_FILE = "Rooms.csv";
 
-import com.mysql.cj.xdevapi.PreparableStatement;
-public class DatabaseConnection {
-    // MySQL connection URL (assuming MySQL is on localhost and default port 3306)
-    private static final String URL = "jdbc:mysql://localhost:3306/HotelManagement";
-    private static final String USER = "root"; // Replace with your MySQL username
-    private static final String PASSWORD = "icu321@"; // Replace with your MySQL password
-
-    public static Connection getConnection() {
-        Connection connection = null;
-        try {
-            // Load MySQL JDBC driver
-            // Class.forName("com.mysql.cj.jdbc.Driver"); // Optional in modern JDBC
-            connection = DriverManager.getConnection(URL, USER, PASSWORD);
-            System.out.println("Database connection established successfully.");
-        } 
-        catch (Exception e) {
+    // Save room details to CSV file
+    public static void saveRooms(List<SingleRoom> singleRooms, List<DoubleRoom> doubleRooms, List<Suite> suites) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(ROOMS_FILE))) {
+            for (SingleRoom room : singleRooms) {
+                writer.write(roomToCSV(room));
+            }
+            for (DoubleRoom room : doubleRooms) {
+                writer.write(roomToCSV(room));
+            }
+            for (Suite room : suites) {
+                writer.write(roomToCSV(room));
+            }
+        } catch (IOException e) {
             e.printStackTrace();
         }
-        return connection;
     }
 
+    // Load room details from CSV file
+    public static void loadRooms(RoomManagement roomManagement) {
+        File file = new File(ROOMS_FILE);
+        if (!file.exists()) return;
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(ROOMS_FILE))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] details = line.split(",");
+                String type = details[0];
+                double price = Double.parseDouble(details[1]);
+                String amenities = details[2];
+                boolean availability = Boolean.parseBoolean(details[3]);
+
+                switch (type) {
+                    case "Single":
+                        SingleRoom singleRoom = new SingleRoom(price, amenities);
+                        singleRoom.setAvailability(availability);
+                        roomManagement.singleRooms.add(singleRoom);
+                        break;
+                    case "Double":
+                        DoubleRoom doubleRoom = new DoubleRoom(price, amenities);
+                        doubleRoom.setAvailability(availability);
+                        roomManagement.doubleRooms.add(doubleRoom);
+                        break;
+                    case "Suite":
+                        Suite suite = new Suite(price, amenities);
+                        suite.setAvailability(availability);
+                        roomManagement.suites.add(suite);
+                        break;
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    // Helper function to convert room object to CSV format
+    private static String roomToCSV(Room room) {
+        return room.getRType() + "," + room.getBasePrice() + "," + room.getAmenities() + "," + room.isAvailable() + "\n";
+    }
 
     public static void addRoom(Room room) {
 
@@ -48,10 +91,10 @@ public class DatabaseConnection {
             }
     
             // Set parameters for query2 to insert the new room
-            stmt.setInt(1, room.roomNumber);
-            stmt.setString(2, room.roomType);
-            stmt.setDouble(3, room.basePrice);
-            stmt.setString(4, room.Amenities);
+            stmt.setInt(1, room.getRoomNum());
+            stmt.setString(2, room.getRType());
+            stmt.setDouble(3, room.getBasePrice());
+            stmt.setString(4, room.getAmenities());
             stmt.setBoolean(5, room.isAvailable());
     
             // Execute the insert statement
@@ -109,43 +152,4 @@ public class DatabaseConnection {
             e.printStackTrace();
         }
     }
-    public static void addGuest(String name, String email, String phoneNumber, String address, String guestType) {
-        String query = "INSERT INTO Guests (guestID,namee, email, phoneNumber, address, guestType) VALUES (?, ?, ?, ?, ?,?)";
-        try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(query)) {
-
-            stmt.setInt(1, Guest.getTotalGuest());
-            stmt.setString(2, name);
-            stmt.setString(3, email);
-            stmt.setString(4, phoneNumber);
-            stmt.setString(5, address);
-            stmt.setString(6, guestType);
-            stmt.executeUpdate();
-
-            System.out.println("Guest added successfully.");
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-    public static void showAllGuests() {
-        String query = "SELECT * FROM Guests";
-        try (Connection conn = DatabaseConnection.getConnection();
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(query)) {
-
-            System.out.println("Guests:");
-            while (rs.next()) {
-                System.out.printf("Guest ID: %d, Name: %s, Email: %s, Phone: %s, Address: %s, Type: %s%n",
-                        rs.getInt("guestID"),
-                        rs.getString("namee"),
-                        rs.getString("email"),
-                        rs.getString("phoneNumber"),
-                        rs.getString("address"),
-                        rs.getString("guestType"));
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
 }
-

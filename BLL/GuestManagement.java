@@ -1,3 +1,7 @@
+package BLL;
+
+
+//import DAL.GuestDataAccess;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,7 +13,7 @@ public class GuestManagement {
     public List<Guest> TotalGuest;
     public List<Guest> guestStayList; // Unified list for guests currently staying
 
-    GuestManagement(){
+    public GuestManagement(){
         regularGuest=new ArrayList<>();
         frequentGuest=new ArrayList<>();
         corporateGuest=new ArrayList<>();
@@ -17,25 +21,25 @@ public class GuestManagement {
         guestStayList =new ArrayList<>();
     }
 
-    void addRegular(String Name,String Email,String phoneNumber,String Address){
+    public void addRegular(String Name,String Email,String phoneNumber,String Address){
         Regular temp= new Regular(Name, Email, phoneNumber, Address);
         regularGuest.add(temp);
         TotalGuest.add(temp);
     }
 
-    void addFrequent(String Name,String Email,String phoneNumber,String Address){
+    public void addFrequent(String Name,String Email,String phoneNumber,String Address){
         Frequent temp= new Frequent(Name, Email, phoneNumber, Address);
         frequentGuest.add(temp);
         TotalGuest.add(temp);
     }
 
-    void addCorporate(String Name,String Email,String phoneNumber,String Address){
+    public void addCorporate(String Name,String Email,String phoneNumber,String Address){
         Corporate temp= new Corporate(Name, Email, phoneNumber, Address);
         corporateGuest.add(temp);
         TotalGuest.add(temp);
     }
 
-    void GuestDetails(int id){
+    public void GuestDetails(int id){
         for(Corporate temp : corporateGuest){
             if(temp.guestID==id){
                 temp.PrintInfo();
@@ -58,12 +62,12 @@ public class GuestManagement {
         }
 
     }
-    void GuestIdName(){
+    public void GuestIdName(){
        for(Guest temp : TotalGuest){
             System.out.println("Guest Id: " + temp.guestID + " Guest Name: " + temp.Name +"\n" );
        }
     }
-    Guest findGuestByID(int guestID) {
+    public Guest findGuestByID(int guestID) {
         for(Corporate temp : corporateGuest){
             if(temp.guestID==guestID){
                return temp;
@@ -84,16 +88,16 @@ public class GuestManagement {
         
         return null;
     }
-    void AddinHotelGuest(Guest guest){
+    public void AddinHotelGuest(Guest guest){
         guestStayList.add(guest);
     }
 
-    void ShowinHotelGuest(){
+    public void ShowinHotelGuest(){
         for(Guest temp: guestStayList){
             temp.PrintInfo();
         }
     }
-    void RemoveinHotelGuest(Guest guest){
+    public void RemoveinHotelGuest(Guest guest){
         guestStayList.remove(guest);
     }
     
