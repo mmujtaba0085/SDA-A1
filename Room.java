@@ -46,6 +46,19 @@ abstract class Room {
         System.out.println("Type: "+roomType+"\nRoom Number: "+roomNumber+"\nBasePrice: "+basePrice+"\nAmenities: "+Amenities+"\n");
         System.out.println("------------------------------------------------------------------");
     }
+    void TotalRoomInSystem(int val){
+        totalRooms=val%7 + (val/7)*100;
+    }
+    public int UpdateRoomCount(){
+        int temp=++totalRooms;
+        if((totalRooms%100) % 7 == 0)
+        {
+
+            totalRooms-=7;
+            totalRooms+=100;
+        }
+        return temp;
+    }
 }
 
 class SingleRoom extends Room{

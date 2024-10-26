@@ -1,4 +1,2 @@
-Single,3000.0,none,true
-Single,2000.0,wifi,true
-Double,3000.0,none,true
-Suite,6000.0,none,true
+Single,3000.0,wifi,true
+Double,40000.0,wifi,true
