@@ -96,5 +96,5 @@ public class GuestManagement {
     void RemoveinHotelGuest(Guest guest){
         guestStayList.remove(guest);
     }
-
+    
 }

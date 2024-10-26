@@ -59,6 +59,11 @@ public class MainMenu {
                     guestManagement.ShowinHotelGuest();
                     break;
                 case 5:
+                    if(useDatabase)
+                    {
+                        DatabaseConnection.showAllGuests();
+                        break;
+                    }
                     guestManagement.GuestIdName();
                     break;
                 case 6:
@@ -156,6 +161,10 @@ public class MainMenu {
             default:
                 System.out.println("Invalid guest type.");
         }
+
+        if(useDatabase){
+            DatabaseConnection.addGuest(name, email, phone, address, guestType);
+        }
     }
 
     private static void bookRoom() {
@@ -225,7 +234,7 @@ public class MainMenu {
   
     private static void showAvailableRooms() {
         if (useDatabase) {
-            DatabaseConnection.getAvailableRooms().forEach(Room::PrintInfo); // Retrieve from database
+            DatabaseConnection.showAvailableRooms();
         } else {
             roomManagement.SingleRoomAvail();
             roomManagement.DoubleRoomAvail();

@@ -64,29 +64,88 @@ public class DatabaseConnection {
         }
     }
     
-    public static List<Room> getAvailableRooms() {
-        List<Room> availableRooms = new ArrayList<>();
+    public static void showAvailableRooms() {
         String query = "SELECT * FROM Rooms WHERE availability = true";
         try (Connection conn = DatabaseConnection.getConnection();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(query)) {
 
+            System.out.println("Available Rooms:");
             while (rs.next()) {
-                int roomNumber = rs.getInt("roomNumber");
-                String roomType = rs.getString("roomType");
-                double basePrice = rs.getDouble("basePrice");
-                String amenities = rs.getString("amenities");
-                boolean availability = rs.getBoolean("availability");
-
-                Room room = new Room(roomType, basePrice, amenities,roomNumber); // You can use subclasses (SingleRoom, DoubleRoom) if necessary
-                //room.setRoomNumber(roomNumber);
-                room.setAvailability(availability);
-                availableRooms.add(room);
+                System.out.printf("Room Number: %d, Type: %s, Price: %.2f, Amenities: %s%n",
+                        rs.getInt("roomNumber"),
+                        rs.getString("roomType"),
+                        rs.getDouble("basePrice"),
+                        rs.getString("amenities"));
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return availableRooms;
+    }
+    public static void updateRoomAvailability(int roomNumber, boolean availability) {
+        String query = "UPDATE Rooms SET availability = ? WHERE roomNumber = ?";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+
+            stmt.setBoolean(1, availability);
+            stmt.setInt(2, roomNumber);
+            stmt.executeUpdate();
+
+            System.out.println("Room availability updated.");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    public static void deleteRoom(int roomNumber) {
+        String query = "DELETE FROM Rooms WHERE roomNumber = ?";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+
+            stmt.setInt(1, roomNumber);
+            stmt.executeUpdate();
+
+            System.out.println("Room deleted successfully.");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    public static void addGuest(String name, String email, String phoneNumber, String address, String guestType) {
+        String query = "INSERT INTO Guests (guestID,namee, email, phoneNumber, address, guestType) VALUES (?, ?, ?, ?, ?,?)";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+
+            stmt.setInt(1, Guest.getTotalGuest());
+            stmt.setString(2, name);
+            stmt.setString(3, email);
+            stmt.setString(4, phoneNumber);
+            stmt.setString(5, address);
+            stmt.setString(6, guestType);
+            stmt.executeUpdate();
+
+            System.out.println("Guest added successfully.");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    public static void showAllGuests() {
+        String query = "SELECT * FROM Guests";
+        try (Connection conn = DatabaseConnection.getConnection();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(query)) {
+
+            System.out.println("Guests:");
+            while (rs.next()) {
+                System.out.printf("Guest ID: %d, Name: %s, Email: %s, Phone: %s, Address: %s, Type: %s%n",
+                        rs.getInt("guestID"),
+                        rs.getString("namee"),
+                        rs.getString("email"),
+                        rs.getString("phoneNumber"),
+                        rs.getString("address"),
+                        rs.getString("guestType"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }
 

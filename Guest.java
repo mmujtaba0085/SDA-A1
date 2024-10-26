@@ -47,6 +47,10 @@ abstract class Guest {
         System.out.println("Booking History: " + BookingHistory);
         System.out.println("------------------------------------------------------------------");
     }
+    public static int getTotalGuest() {
+        return totalGuest; // No need to use a temporary variable
+    }
+
 }
 
 
