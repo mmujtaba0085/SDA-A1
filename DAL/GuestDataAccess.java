@@ -129,4 +129,54 @@ public class GuestDataAccess {
             e.printStackTrace();
         }
     }
+    public static void GuestStay(int guestID, int roomNumber) {
+        String query = "INSERT INTO GuestStay (guestID, roomNumber) VALUES (?, ?)";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+
+            stmt.setInt(1, guestID);
+            stmt.setInt(2, roomNumber);
+            stmt.executeUpdate();
+
+            System.out.println("Guest stay recorded successfully.");
+        } catch (SQLException e) {
+            System.out.println("Error recording guest stay.");
+            e.printStackTrace();
+        }
+    }
+
+    public static void RemoveGuest(int guestID) {
+        String query = "DELETE FROM GuestStay WHERE guestID = ?";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+
+            stmt.setInt(1, guestID);
+            stmt.executeUpdate();
+
+            System.out.println("Guest removed successfully.");
+        } catch (SQLException e) {
+            System.out.println("Error removing guest.");
+            e.printStackTrace();
+        }
+    }
+     // New method to increment totalFee in Guests table by guest ID
+    public static void incrementTotalFee(int guestID, double amount) {
+        String query = "UPDATE Guests SET totalFee = totalFee + ? WHERE guestID = ?";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+
+            stmt.setDouble(1, amount);
+            stmt.setInt(2, guestID);
+            int rowsUpdated = stmt.executeUpdate();
+
+            if (rowsUpdated > 0) {
+                System.out.println("Total fee updated successfully.");
+            } else {
+                System.out.println("Guest ID not found.");
+            }
+        } catch (SQLException e) {
+            System.out.println("Error updating total fee.");
+            e.printStackTrace();
+        }
+    }
 }

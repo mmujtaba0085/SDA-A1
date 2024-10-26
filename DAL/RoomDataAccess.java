@@ -152,4 +152,74 @@ public class RoomDataAccess {
             e.printStackTrace();
         }
     }
+    public static void addBooking(int guestID, int roomNumber, int nightsStaying, double additionalCharges, double totalCost) {
+        String query = "INSERT INTO Bookings (guestID, roomNumber, nights, additionalCharges, totalCost) VALUES (?, ?, ?, ?, ?)";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+
+            stmt.setInt(1, guestID);
+            stmt.setInt(2, roomNumber);
+            stmt.setInt(3, nightsStaying);
+            stmt.setDouble(4, additionalCharges);
+            stmt.setDouble(5, totalCost);
+            stmt.executeUpdate();
+
+            System.out.println("Booking added successfully.");
+        } catch (SQLException e) {
+            System.out.println("Error adding booking.");
+            e.printStackTrace();
+        }
+    }
+    public static double getRoomPrice(int roomNumber) {
+        String query = "SELECT basePrice FROM Rooms WHERE roomNumber = ?";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+
+            stmt.setInt(1, roomNumber);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                return rs.getDouble("basePrice");
+            } else {
+                System.out.println("Room number not found.");
+                return -1; // or throw an exception or return another appropriate value
+            }
+        } catch (SQLException e) {
+            System.out.println("Error retrieving room price.");
+            e.printStackTrace();
+            return -1; // or throw an exception or return another appropriate value
+        }
+    }
+    // New method to get the first available room type's ID and set its availability to 0
+    public static Integer getFirstAvailableRoomType(String roomType) {
+        String selectQuery = "SELECT roomNumber FROM Rooms WHERE roomType = ? AND availability = true LIMIT 1";
+        String updateQuery = "UPDATE Rooms SET availability = false WHERE roomNumber = ?";
+        
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement selectStmt = conn.prepareStatement(selectQuery)) {
+             
+            // Set the room type parameter
+            selectStmt.setString(1, roomType);
+            ResultSet rs = selectStmt.executeQuery();
+            
+            if (rs.next()) {
+                int roomNumber = rs.getInt("roomNumber");
+                
+                // Update availability to false
+                try (PreparedStatement updateStmt = conn.prepareStatement(updateQuery)) {
+                    updateStmt.setInt(1, roomNumber);
+                    updateStmt.executeUpdate();
+                }
+                
+                return roomNumber; // Return the roomNumber
+            } else {
+                System.out.println("No available rooms of type: " + roomType);
+                return null; // Or return another appropriate value indicating no rooms are available
+            }
+        } catch (SQLException e) {
+            System.out.println("Error retrieving or updating room availability.");
+            e.printStackTrace();
+            return null; // Or return another appropriate value indicating an error occurred
+        }
+    }
 }

@@ -1,6 +1,6 @@
 import BLL.*;
 import DAL.*;
-import Connection.DatabaseConnection;
+//import Connection.DatabaseConnection;
 import java.util.Scanner;
 
 public class MainMenu {
@@ -83,6 +83,11 @@ public class MainMenu {
                 case 8:
                     System.out.println("Provide Guest ID: ");
                     int id=scanner.nextInt();
+                    if(useDatabase)
+                    {
+                        GuestDataAccess.RemoveGuest(id);
+                        break;
+                    }
                     guestManagement.RemoveinHotelGuest(guestManagement.findGuestByID(id));
                     break;
                 case 9:
@@ -104,7 +109,7 @@ public class MainMenu {
             System.out.println("------------------------------------------------------------------");
         }
     }
-
+    
     private static void addRoom() {
         System.out.print("Enter room type (Single/Double/Suite): ");
         String roomType = scanner.nextLine();
@@ -113,7 +118,7 @@ public class MainMenu {
         scanner.nextLine(); // Consume newline
         System.out.print("Enter amenities (e.g., Wi-Fi, AC): ");
         String amenities = scanner.nextLine();
-
+       
         Room room;
         switch (roomType.toLowerCase()) {
             case "single":
@@ -138,7 +143,37 @@ public class MainMenu {
         }
         System.out.println("Room added successfully.");
     }
+    private static void bookRoomDatabase(int guestID, String roomType, int nights, double additionalCharges) {
 
+        
+    
+        double totalCost =0;
+        if(roomType=="single")
+        {
+            double serviceCharges=5000 * 0.05; //service Charges -> 5% of basePrice
+            totalCost=5000 + serviceCharges * nights ;   
+        }
+        else if(roomType=="double")
+        {
+            double serviceCharges=8000 * 0.05; //service Charges -> 5% of basePrice
+            totalCost = (8000 + serviceCharges + additionalCharges) * nights  ;
+        }
+        else{
+            double serviceCharges=12000 * 0.05; //service Charges -> 5% of basePrice
+            totalCost = (8000 + serviceCharges + additionalCharges) * nights  ;
+        }
+        GuestDataAccess.updateGuestTotalFee(guestID, totalCost);
+    
+        // Insert booking record into Bookings table
+        RoomDataAccess.addBooking(guestID, RoomDataAccess.getFirstAvailableRoomType(roomType), nights, additionalCharges, totalCost);
+    
+        // Add guest to GuestStay table for current stay
+        GuestDataAccess.GuestStay(guestID, room.getRoomNum());
+    
+    
+        System.out.println("Room booked successfully. Total cost: " + totalCost);
+    }
+    
     private static void addGuest() {
         System.out.print("Enter guest type (Regular/Frequent/Corporate): ");
         String guestType = scanner.nextLine();
@@ -176,7 +211,7 @@ public class MainMenu {
         scanner.nextLine(); // Consume newline
 
         Guest guest = guestManagement.findGuestByID(guestID);
-        if (guest == null) {
+        if (guest == null && !useDatabase) {
             System.out.println("Guest not found.");
             return;
         }
@@ -190,7 +225,7 @@ public class MainMenu {
         scanner.nextLine(); // Consume newline
 
         Room room = findAvailableRoom(roomType);
-        if (room == null) {
+        if (room == null && !useDatabase) {
             System.out.println("No available rooms of this type.");
             return;
         }
@@ -201,8 +236,15 @@ public class MainMenu {
 
         room.setAvailability(false); // Mark room as unavailable
         guestManagement.AddinHotelGuest(guest);
-
-        System.out.println("Room booked successfully. Total cost: " + totalCost);
+        if(useDatabase)
+        {
+            bookRoomDatabase(guestID, roomType.toLowerCase(), nights, additionalCharges);
+        }
+        if(!useDatabase)
+        {
+            System.out.println("Room booked successfully. Total cost: " + totalCost);
+        }
+        
     }
 
 
